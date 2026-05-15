@@ -1,6 +1,6 @@
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const labels={planning:'Lên kế hoạch',todo:'Cần làm',doing:'Đang thực hiện',review:'Đang xem xét',done:'Hoàn thành',high:'Cao',medium:'Trung bình',low:'Thấp'};
-let data=Store.load(),page='dashboard',cloud={scriptUrl:'',token:'',autoSync:true,...Store.cloud()},syncTimer=null;
+let data=Store.load(),page='dashboard',syncTimer=null;
 const clean=v=>String(v??'').replace(/[<>&"]/g,m=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[m]));
 const trashIcon='<svg class="trash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4.8A1.8 1.8 0 0 1 9.8 3h4.4A1.8 1.8 0 0 1 16 4.8V6"/><path d="M19 6l-.9 13.2A2 2 0 0 1 16.1 21H7.9a2 2 0 0 1-2-1.8L5 6"/><path d="M10 11v5"/><path d="M14 11v5"/></svg>';
 const id=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -98,67 +98,10 @@ function delTask(tid){const t=data.tasks.find(x=>x.id===tid);if(!t)return;if(con
 function updateProject(pid){const ts=data.tasks.filter(t=>t.projectId===pid),p=data.projects.find(p=>p.id===pid);if(!p||!ts.length)return;const score=ts.reduce((s,t)=>s+(t.status==='done'?1:t.status==='review'?0.72:t.status==='doing'?0.45:0),0);p.progress=Math.round(score/ts.length*100);if(p.progress===100)p.status='done';else if(p.progress>0&&p.status==='planning')p.status='doing';else if(p.status==='done')p.status='doing'}
 function saveMember(e){e.preventDefault();const m={id:id('m'),name:$('#mname').value.trim(),role:$('#mrole').value.trim()||'Thành viên'};data.members.push(m);closeModals();persist(`Đã thêm thành viên: ${m.name}`)}
 function delMember(mid){const m=member(mid);if(!m.id)return;if(data.members.length<=1){toast('Cần giữ ít nhất 1 thành viên');return}const next=data.members.find(x=>x.id!==mid);const assigned=data.tasks.filter(t=>t.assigneeId===mid).length,leading=data.projects.filter(p=>p.leaderId===mid).length;const extra=assigned||leading?` ${assigned} công việc và ${leading} dự án sẽ chuyển sang ${next.name}.`:'';if(confirm(`Xóa thành viên "${m.name}"?${extra}`)){data.tasks.forEach(t=>{if(t.assigneeId===mid)t.assigneeId=next.id});data.projects.forEach(p=>{if(p.leaderId===mid)p.leaderId=next.id});data.members=data.members.filter(x=>x.id!==mid);persist(`Đã xóa thành viên: ${m.name}`)}}
-function cloudOK(){return cloud.scriptUrl&&cloud.token&&!String(cloud.scriptUrl).includes('PASTE_APPS_SCRIPT')&&!String(cloud.token).includes('PASTE_SYNC_KEY')}function cloudStatus(mode=''){const pill=$('#syncPill'),txt=$('#syncText'),mini=$('#cloudMini');pill.classList.remove('online','error');if(!cloudOK()){pill.classList.add('error');txt.textContent='Cloud chưa cấu hình';mini.textContent='Cần cấu hình Sheet';return}if(mode==='error'){pill.classList.add('error');txt.textContent='Sync lỗi';mini.textContent='Sync lỗi';return}if(mode==='saving'){txt.textContent='Đang sync...';mini.textContent='Đang sync...';return}pill.classList.add('online');txt.textContent='Google Sheet';mini.textContent='Đang lưu online'}
-function jsonpRequest(url,timeout=12000){
-  return new Promise((resolve,reject)=>{
-    const cb='jsonp_'+Date.now().toString(36)+Math.random().toString(36).slice(2);
-    const script=document.createElement('script');
-    const cleanup=()=>{clearTimeout(timer);delete window[cb];script.remove()};
-    const timer=setTimeout(()=>{cleanup();reject(Error('jsonp_timeout'))},timeout);
-    window[cb]=payload=>{cleanup();resolve(payload)};
-    script.onerror=()=>{cleanup();reject(Error('jsonp_error'))};
-    const u=new URL(url);
-    u.searchParams.set('callback',cb);
-    script.src=u.toString();
-    document.head.appendChild(script);
-  });
-}
-async function pushCloud(silent=false){
-  if(!cloudOK()){cloudStatus('error');if(!silent)toast('Chưa cấu hình Google Sheet trong js/config.js');return}
-  try{
-    cloudStatus('saving');
-    const payload={token:cloud.token,data:{...data,updatedAt:new Date().toISOString()}};
-    await fetch(cloud.scriptUrl,{
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify(payload),
-      keepalive:false
-    });
-    cloudStatus();
-    if(!silent)toast('Đã gửi dữ liệu lên Google Sheet');
-  }catch(e){
-    console.error(e);
-    cloudStatus('error');
-    if(!silent)toast('Không gửi được dữ liệu lên Google Sheet');
-  }
-}
-async function pullCloud(silent=false){
-  if(!cloudOK()){cloudStatus('error');if(!silent)toast('Chưa cấu hình Google Sheet trong js/config.js');return}
-  try{
-    cloudStatus('saving');
-    const u=new URL(cloud.scriptUrl);
-    u.searchParams.set('token',cloud.token);
-    u.searchParams.set('mode','json');
-    u.searchParams.set('_',Date.now().toString(36));
-    let j;
-    try{j=await jsonpRequest(u.toString(),7000)}catch(first){await new Promise(r=>setTimeout(r,650));j=await jsonpRequest(u.toString(),13000)}
-    if(!j.ok)throw Error(j.error||'pull failed');
-    if(j.data?.projects&&j.data?.tasks&&j.data?.members){
-      data=j.data;
-      render();
-      if(!silent)toast('Đã tải dữ liệu từ Google Sheet');
-    }else if(!silent){
-      toast('Google Sheet đang trống');
-    }
-    cloudStatus();
-  }catch(e){
-    console.error(e);
-    cloudStatus('error');
-    if(!silent)toast('Không tải được dữ liệu từ Google Sheet');
-  }
-}
-function debouncedPush(){if(!cloudOK())return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>pushCloud(true),cloud.syncDebounceMs||700)}
-function saveCloud(){cloud={...cloud,scriptUrl:$('#cloudUrl').value.trim(),token:$('#cloudKey').value.trim(),autoSync:true};Store.saveCloud(cloud);cloudStatus();toast('Đã lưu cấu hình Google Sheet Sync')}
+function cloudOK(){const c=window.CLOUD_CONFIG||{};return !!(c.supabaseUrl&&c.supabaseKey&&!String(c.supabaseUrl).startsWith('PASTE'))}
+function cloudStatus(mode=''){const pill=$('#syncPill'),txt=$('#syncText'),mini=$('#cloudMini');pill.classList.remove('online','error','saving');if(!cloudOK()){pill.classList.add('error');txt.textContent='Chưa cấu hình';mini.textContent='Cần cấu hình Supabase';return}if(mode==='error'){pill.classList.add('error');txt.textContent='Sync lỗi';mini.textContent='Sync lỗi';return}if(mode==='saving'){pill.classList.add('saving');txt.textContent='Đang sync...';mini.textContent='Đang sync...';return}pill.classList.add('online');txt.textContent='Supabase';mini.textContent='Đang lưu online'}
+async function pushCloud(silent=false){if(!cloudOK()){cloudStatus('error');if(!silent)toast('Chưa cấu hình Supabase trong js/config.js');return}try{cloudStatus('saving');await Store.push(data);cloudStatus();if(!silent)toast('Đã lưu lên Supabase')}catch(e){console.error(e);cloudStatus('error');if(!silent)toast('Không lưu được lên Supabase')}}
+function pullCloud(silent=false){if(!cloudOK()){cloudStatus('error');if(!silent)toast('Chưa cấu hình Supabase trong js/config.js');return}cloudStatus('saving');Store.pull().then(d=>{data=d;render();cloudStatus();if(!silent)toast('Đã tải từ Supabase')}).catch(e=>{console.error(e);cloudStatus('error');if(!silent)toast('Không tải được từ Supabase')})}
+function debouncedPush(){if(!cloudOK())return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>pushCloud(true),(window.CLOUD_CONFIG||{}).syncDebounceMs||700)}
 function importJson(e){const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.projects||!x.tasks||!x.members)throw Error();data=x;render();persist('Đã nhập dữ liệu JSON')}catch{alert('Không nhập được JSON. Kiểm tra lại định dạng.')}finally{e.target.value=''}};r.readAsText(f)}
-document.addEventListener('DOMContentLoaded',()=>{if($('#cloudUrl'))$('#cloudUrl').value=cloud.scriptUrl||'';if($('#cloudKey'))$('#cloudKey').value=cloud.token||'';$('#nav').onclick=e=>{const b=e.target.closest('button[data-page]');if(b)setPage(b.dataset.page)};$('#hamb').onclick=()=>$('#sidebar').classList.toggle('open');document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals()});$$('[data-close]').forEach(b=>b.onclick=closeModals);$$('.modal-bg').forEach(m=>m.onclick=e=>{if(e.target===m)closeModals()});$('#heroProject').onclick=$('#addProject').onclick=()=>openProject();$('#heroTask').onclick=$('#addTask').onclick=$('#addTaskK').onclick=()=>openTask();$('#addMember').onclick=()=>{$('#mname').value='';$('#mrole').value='';openModal('memberModal')};$('#quickAdd').onclick=()=>page==='projects'?openProject():page==='members'?$('#addMember').click():openTask();$('#projectForm').onsubmit=saveProject;$('#taskForm').onsubmit=saveTask;$('#memberForm').onsubmit=saveMember;$('#pprogress').oninput=e=>$('#pProgressText').textContent=e.target.value+'%';if($('#pstart'))$('#pstart').oninput=$('#pstart').onchange=syncProjectEndDate;if($('#pendDay')&&$('#pendMonth')&&$('#pendYear')){$('#pendDay').oninput=e=>handleDatePartInput(e.target,$('#pendMonth'));$('#pendMonth').oninput=e=>handleDatePartInput(e.target,$('#pendYear'));$('#pendYear').oninput=e=>handleDatePartInput(e.target);[$('#pendDay'),$('#pendMonth'),$('#pendYear')].forEach(x=>{x.onfocus=e=>e.target.select();x.onchange=syncProjectEndDate})}['projectSearch','projectStatus'].forEach(x=>$('#'+x).oninput=projectTable);['taskSearch','taskProjectFilter','taskStatusFilter'].forEach(x=>$('#'+x).oninput=taskTable);['kanbanSearch','kanbanProject'].forEach(x=>$('#'+x).oninput=kanban);if($('#exportBtn'))$('#exportBtn').onclick=()=>Store.export(data);if($('#importBtn'))$('#importBtn').onclick=()=>$('#jsonFile').click();if($('#jsonFile'))$('#jsonFile').onchange=importJson;if($('#saveCloud'))$('#saveCloud').onclick=saveCloud;if($('#pushCloud'))$('#pushCloud').onclick=()=>pushCloud();if($('#pullCloud'))$('#pullCloud').onclick=()=>pullCloud();if($('#clearCloud'))$('#clearCloud').onclick=()=>{toast('Cloud Sync đã được ẩn. Hãy sửa js/config.js nếu cần đổi cấu hình.')};render();if(cloudOK())pullCloud(true)});
+document.addEventListener('DOMContentLoaded',()=>{$('#nav').onclick=e=>{const b=e.target.closest('button[data-page]');if(b)setPage(b.dataset.page)};$('#hamb').onclick=()=>$('#sidebar').classList.toggle('open');document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals()});$$('[data-close]').forEach(b=>b.onclick=closeModals);$$('.modal-bg').forEach(m=>m.onclick=e=>{if(e.target===m)closeModals()});$('#heroProject').onclick=$('#addProject').onclick=()=>openProject();$('#heroTask').onclick=$('#addTask').onclick=$('#addTaskK').onclick=()=>openTask();$('#addMember').onclick=()=>{$('#mname').value='';$('#mrole').value='';openModal('memberModal')};$('#quickAdd').onclick=()=>page==='projects'?openProject():page==='members'?$('#addMember').click():openTask();$('#projectForm').onsubmit=saveProject;$('#taskForm').onsubmit=saveTask;$('#memberForm').onsubmit=saveMember;$('#pprogress').oninput=e=>$('#pProgressText').textContent=e.target.value+'%';if($('#pstart'))$('#pstart').oninput=$('#pstart').onchange=syncProjectEndDate;if($('#pendDay')&&$('#pendMonth')&&$('#pendYear')){$('#pendDay').oninput=e=>handleDatePartInput(e.target,$('#pendMonth'));$('#pendMonth').oninput=e=>handleDatePartInput(e.target,$('#pendYear'));$('#pendYear').oninput=e=>handleDatePartInput(e.target);[$('#pendDay'),$('#pendMonth'),$('#pendYear')].forEach(x=>{x.onfocus=e=>e.target.select();x.onchange=syncProjectEndDate})}['projectSearch','projectStatus'].forEach(x=>$('#'+x).oninput=projectTable);['taskSearch','taskProjectFilter','taskStatusFilter'].forEach(x=>$('#'+x).oninput=taskTable);['kanbanSearch','kanbanProject'].forEach(x=>$('#'+x).oninput=kanban);if($('#exportBtn'))$('#exportBtn').onclick=()=>Store.export(data);if($('#importBtn'))$('#importBtn').onclick=()=>$('#jsonFile').click();if($('#jsonFile'))$('#jsonFile').onchange=importJson;if($('#pushCloud'))$('#pushCloud').onclick=()=>pushCloud();if($('#pullCloud'))$('#pullCloud').onclick=()=>pullCloud();render();if(cloudOK()){const ov=$('#loadOverlay'),hide=()=>ov?.classList.remove('show'),t=setTimeout(hide,10000);ov?.classList.add('show');cloudStatus('saving');Store.pull().then(d=>{data=d;render();cloudStatus();clearTimeout(t);hide()}).catch(e=>{console.error(e);cloudStatus('error');clearTimeout(t);hide()})}else{cloudStatus()}});
