@@ -132,28 +132,25 @@ async function pushCloud(silent=false){
     if(!silent)toast('Không gửi được dữ liệu lên Google Sheet');
   }
 }
-function pullCloud(silent=false){
+async function pullCloud(silent=false){
   if(!cloudOK()){cloudStatus('error');if(!silent)toast('Chưa cấu hình Google Sheet trong js/config.js');return}
   try{
     cloudStatus('saving');
     const u=new URL(cloud.scriptUrl);
     u.searchParams.set('token',cloud.token);
     u.searchParams.set('mode','json');
-    jsonpRequest(u.toString()).then(j=>{
-      if(!j.ok)throw Error(j.error||'pull failed');
-      if(j.data?.projects&&j.data?.tasks&&j.data?.members){
-        data=j.data;
-        render();
-        if(!silent)toast('Đã tải dữ liệu từ Google Sheet');
-      }else if(!silent){
-        toast('Google Sheet đang trống');
-      }
-      cloudStatus();
-    }).catch(e=>{
-      console.error(e);
-      cloudStatus('error');
-      if(!silent)toast('Không tải được dữ liệu từ Google Sheet');
-    });
+    u.searchParams.set('_',Date.now().toString(36));
+    let j;
+    try{j=await jsonpRequest(u.toString(),7000)}catch(first){await new Promise(r=>setTimeout(r,650));j=await jsonpRequest(u.toString(),13000)}
+    if(!j.ok)throw Error(j.error||'pull failed');
+    if(j.data?.projects&&j.data?.tasks&&j.data?.members){
+      data=j.data;
+      render();
+      if(!silent)toast('Đã tải dữ liệu từ Google Sheet');
+    }else if(!silent){
+      toast('Google Sheet đang trống');
+    }
+    cloudStatus();
   }catch(e){
     console.error(e);
     cloudStatus('error');
