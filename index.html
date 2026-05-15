@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Báo cáo tiến độ - Thẩm mỹ Kangnam</title>
+<meta name="theme-color" content="#ff5fa2" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/layout.css" />
+<link rel="stylesheet" href="css/components.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+<div class="bg-orb orb-a"></div><div class="bg-orb orb-b"></div><div class="bg-orb orb-c"></div><div class="noise"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="logo">KN</div><div><span>Kangnam Progress</span><h1>Thẩm mỹ Kangnam</h1></div></div>
+    <nav class="nav" id="nav">
+      <button class="active" data-page="dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h7V4H4v9Zm9 7h7V4h-7v16ZM4 20h7v-5H4v5Z"/></svg><span>Tổng quan</span></button>
+      <button data-page="projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h4.1c.75 0 1.46.34 1.93.92L13.8 6.5h3.7A2.5 2.5 0 0 1 20 9v7.5A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-10Z"/></svg><span>Dự án</span></button>
+      <button data-page="kanban"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5A2 2 0 0 1 10.5 6v12A2 2 0 0 1 8.5 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm10.5 0H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg><span>Kanban</span></button>
+      <button data-page="tasks"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 6.3a1 1 0 0 1 0 1.4l-9.1 9.1a1 1 0 0 1-1.4 0L4.3 11.4a1 1 0 1 1 1.4-1.4l4.7 4.65 8.4-8.35a1 1 0 0 1 1.4 0Z"/></svg><span>Công việc</span></button>
+      <button data-page="calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8Z"/></svg><span>Lịch</span></button>
+      <button data-page="members"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 11.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2Zm0 2c3.5 0 6.3 1.65 6.3 3.7V19a2 2 0 0 1-2 2H4.5a2 2 0 0 1-2-2v-2.1c0-2.05 2.8-3.7 6.3-3.7Zm8.35-.45a3.35 3.35 0 1 1 0-6.7 3.35 3.35 0 0 1 0 6.7Zm.3 1.7c2.25.12 4.05 1.24 4.05 2.64V19a2 2 0 0 1-2 2h-2.72c.2-.44.32-.92.32-1.43V16.9c0-.88-.34-1.7-.93-2.45h1.28Z"/></svg><span>Thành viên</span></button>
+      <button data-page="activity"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 1-8.94 5.53 1 1 0 1 1 1.79.9A8 8 0 1 0 12 4v2.2c0 .9-1.08 1.35-1.7.72L7.38 4a1 1 0 0 1 0-1.42L10.3-.34c.62-.63 1.7-.19 1.7.71V2Zm1 5a1 1 0 1 0-2 0v5c0 .34.17.66.45.85l3.4 2.25A1 1 0 0 0 16 13.44l-3-2V7Z"/></svg><span>Hoạt động</span></button>
+    </nav>
+    <div class="side-card"><b>Signature Edition</b><h3>Kangnam Aesthetic Clinic</h3><p id="cloudMini">Google Sheet</p></div>
+    <div class="profile"><div class="avatar">KN</div><div><b>Thẩm mỹ Kangnam</b><span>Bệnh viện thẩm mỹ</span></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button class="hamb" id="hamb">☰</button>
+      <div class="title"><span>Kangnam Ultimate Dashboard</span><h2 id="title">Tổng quan</h2><p>Trang chủ / <b id="crumb">Tổng quan</b></p></div>
+      <div class="actions"><div class="sync" id="syncPill"><i></i><span id="syncText">Google Sheet</span></div><button id="quickAdd" class="btn primary">+ Tạo nhanh</button></div>
+    </header>
+    <section class="page active" id="page-dashboard">
+      <div class="hero card">
+        <div><em>Seoul Clinic Workflow</em><h3>Báo cáo tiến độ - Thẩm mỹ Kangnam</h3><div class="hero-buttons"><button id="heroProject" class="btn primary">+ Thêm dự án</button><button id="heroTask" class="btn soft">+ Thêm công việc</button></div></div>
+        <div class="ring-wrap"><div class="ring" id="ring"><strong id="avgText">0%</strong></div><p>Tiến độ trung bình</p></div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="grid two-col alert-grid">
+        <div class="card overview-card">
+          <div class="card-head"><div><em>Alert</em><h3 class="red">Công việc quá hạn <span id="overdueCount" class="head-count">0</span></h3></div></div>
+          <div id="overdue" class="mini-list dashboard-scroll"></div>
+        </div>
+        <div class="card overview-card">
+          <div class="card-head"><div><em>Upcoming</em><h3 class="gold-text">Sắp đến hạn 7 ngày <span id="soonCount" class="head-count">0</span></h3></div></div>
+          <div id="soon" class="mini-list dashboard-scroll"></div>
+        </div>
+      </div>
+      <div class="grid two-col">
+        <div class="card workload-card overview-card">
+          <div class="card-head"><div><em>Workload</em><h3>Phân bổ công việc <span id="workloadCount" class="head-count">0</span></h3></div></div>
+          <div class="legend legend-pill"><span><i class="rose"></i>Cần làm</span><span><i class="gold"></i>Đang TH</span><span><i class="mint"></i>Hoàn thành</span></div>
+          <div id="chart" class="chart compact-chart dashboard-scroll"></div>
+        </div>
+        <div class="card overview-card">
+          <div class="card-head"><div><em>Portfolio</em><h3>Tiến độ dự án <span id="projectCount" class="head-count">0</span></h3></div></div>
+          <div id="progressList" class="progress-list dashboard-scroll"></div>
+        </div>
+      </div>
+    </section>
+    <section class="page" id="page-projects"><div class="page-banner"><div class="banner-copy"><em>Portfolio Management</em><h3>Quản lý dự án</h3></div><div class="banner-metrics"><article class="banner-metric"><span>Tổng dự án</span><strong id="projectTotal">0</strong></article><article class="banner-metric"><span>Hoàn thành</span><strong id="projectDone">0</strong></article><article class="banner-metric"><span>Ngân sách</span><strong id="projectBudget">0 đ</strong></article></div></div><div class="toolbar"><div class="filters"><label class="search">⌕<input id="projectSearch" placeholder="Tìm kiếm dự án..." /></label><select id="projectStatus" class="input"><option value="all">Tất cả trạng thái</option><option value="planning">Lên kế hoạch</option><option value="doing">Đang thực hiện</option><option value="review">Đang xem xét</option><option value="done">Hoàn thành</option></select></div><button id="addProject" class="btn primary">+ Tạo dự án</button></div><div class="card table"><table><thead><tr><th>Mã</th><th>Tên dự án</th><th>Trạng thái</th><th>Ưu tiên</th><th>Ngân sách</th><th>Leader</th><th>Tiến độ</th><th>Thao tác</th></tr></thead><tbody id="projectsTable"></tbody></table></div></section>
+    <section class="page" id="page-kanban"><div class="page-banner kanban-banner"><div class="banner-copy"><em>Live Workflow</em><h3>Bảng điều phối Kanban</h3></div><div class="banner-metrics"><article class="banner-metric"><span>Cần làm</span><strong id="kanbanTodo">0</strong></article><article class="banner-metric"><span>Đang làm</span><strong id="kanbanDoing">0</strong></article><article class="banner-metric"><span>Hoàn thành</span><strong id="kanbanDone">0</strong></article></div></div><div class="toolbar"><div class="filters"><label class="search">⌕<input id="kanbanSearch" placeholder="Tìm công việc..." /></label><select id="kanbanProject" class="input"></select></div><button id="addTaskK" class="btn primary">+ Tạo công việc</button></div><div class="kanban" id="kanban"></div></section>
+    <section class="page" id="page-tasks"><div class="page-banner"><div class="banner-copy"><em>Task Operations</em><h3>Điều phối công việc</h3></div><div class="banner-metrics"><article class="banner-metric"><span>Tổng công việc</span><strong id="taskTotal">0</strong></article><article class="banner-metric"><span>Quá hạn</span><strong id="taskOverdue">0</strong></article><article class="banner-metric"><span>7 ngày tới</span><strong id="taskSoon">0</strong></article></div></div><div class="toolbar"><div class="filters"><label class="search">⌕<input id="taskSearch" placeholder="Tìm kiếm công việc..." /></label><select id="taskProjectFilter" class="input"></select><select id="taskStatusFilter" class="input"><option value="all">Tất cả trạng thái</option><option value="todo">Cần làm</option><option value="doing">Đang thực hiện</option><option value="review">Đang xem xét</option><option value="done">Hoàn thành</option></select></div><button id="addTask" class="btn primary">+ Tạo công việc</button></div><div class="card table"><table><thead><tr><th>Mã</th><th>Tiêu đề</th><th>Dự án</th><th>Người thực hiện</th><th>Trạng thái</th><th>Ưu tiên</th><th>Hạn</th><th>Thao tác</th></tr></thead><tbody id="tasksTable"></tbody></table></div></section>
+    <section class="page" id="page-calendar"><div class="card"><div class="card-head"><div><em>Calendar</em><h3>Lịch deadline 14 ngày tới</h3></div></div><div class="calendar" id="calendar"></div></div></section>
+    <section class="page" id="page-members"><div class="toolbar"><p class="note">Quản lý nhân sự theo phong cách thẩm mỹ viện Hàn Quốc: gọn, rõ, tinh tế.</p><button id="addMember" class="btn primary">+ Thêm thành viên</button></div><div class="members" id="members"></div></section>
+    <section class="page" id="page-activity"><div class="card"><div class="card-head"><div><em>Audit trail</em><h3>Hoạt động gần đây</h3></div></div><div class="timeline" id="activity"></div></div></section>
+  </main>
+</div>
+<div class="modal-bg" id="projectModal"><form class="modal" id="projectForm"><div class="modal-head"><div><em>Project</em><h3 id="projectModalTitle">Tạo dự án</h3></div><button type="button" data-close>×</button></div><div class="form-grid"><input type="hidden" id="pid" /><label>Tên dự án *<input id="pname" class="input" required /></label><label>Trạng thái<select id="pstatus" class="input"><option value="planning">Lên kế hoạch</option><option value="doing">Đang thực hiện</option><option value="review">Đang xem xét</option><option value="done">Hoàn thành</option></select></label><label class="full">Mô tả<textarea id="pdesc" class="input" rows="4"></textarea></label><label>Ưu tiên<select id="ppriority" class="input"><option value="low">Thấp</option><option value="medium" selected>Trung bình</option><option value="high">Cao</option></select></label><label>Ngân sách<input id="pbudget" type="number" min="0" class="input" /></label><label>Ngày bắt đầu<input id="pstart" type="date" class="input" /></label><label>Ngày kết thúc<input id="pend" type="date" class="input" /></label><label>Leader<select id="pleader" class="input"></select></label><label>Tiến độ: <b id="pProgressText">0%</b><input id="pprogress" type="range" min="0" max="100" /></label></div><div class="modal-foot"><button type="button" data-close class="btn glass">Hủy</button><button class="btn primary">Lưu dự án</button></div></form></div>
+<div class="modal-bg" id="taskModal"><form class="modal" id="taskForm"><div class="modal-head"><div><em>Task</em><h3 id="taskModalTitle">Tạo công việc</h3></div><button type="button" data-close>×</button></div><div class="form-grid"><input type="hidden" id="tid" /><label class="full">Tiêu đề *<input id="ttitle" class="input" required /></label><label class="full">Mô tả<textarea id="tdesc" class="input" rows="4"></textarea></label><label>Dự án *<select id="tproject" class="input" required></select></label><label>Người thực hiện<select id="tassignee" class="input"></select></label><label>Trạng thái<select id="tstatus" class="input"><option value="todo">Cần làm</option><option value="doing">Đang thực hiện</option><option value="review">Đang xem xét</option><option value="done">Hoàn thành</option></select></label><label>Ưu tiên<select id="tpriority" class="input"><option value="low">Thấp</option><option value="medium" selected>Trung bình</option><option value="high">Cao</option></select></label><label>Ngày bắt đầu<input id="tstart" type="date" class="input" /></label><label>Ngày hết hạn *<input id="tdue" type="date" class="input" required /></label><label class="full">Tags<input id="ttags" class="input" placeholder="content, sales, cskh, doctor" /></label></div><div class="modal-foot"><button type="button" data-close class="btn glass">Hủy</button><button class="btn primary">Lưu công việc</button></div></form></div>
+<div class="modal-bg" id="memberModal"><form class="modal small" id="memberForm"><div class="modal-head"><div><em>Member</em><h3>Thêm thành viên</h3></div><button type="button" data-close>×</button></div><div class="form-grid"><label>Tên *<input id="mname" class="input" required /></label><label>Vai trò<input id="mrole" class="input" /></label></div><div class="modal-foot"><button type="button" data-close class="btn glass">Hủy</button><button class="btn primary">Lưu</button></div></form></div>
+
+<div class="modal-bg" id="dayModal">
+  <div class="modal day-modal">
+    <div class="modal-head">
+      <div>
+        <em>Calendar detail</em>
+        <h3 id="dayModalTitle">Chi tiết deadline</h3>
+        <p id="dayModalMeta" class="day-modal-meta"></p>
+      </div>
+      <button type="button" data-close>×</button>
+    </div>
+    <div class="day-modal-body">
+      <div id="dayModalList" class="day-modal-list"></div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" data-close class="btn glass">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="jsonFile" accept="application/json" hidden /><div id="toast" class="toast"></div>
+<script src="js/seed.js"></script><script src="js/config.js"></script>
+<script src="js/storage.js"></script><script src="js/app.js"></script>
+</body></html>
