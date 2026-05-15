@@ -2114,3 +2114,12 @@ select:hover {
 .page#page-calendar .card-head small {
   display: none !important;
 }
+
+/* ===== Supabase sync UI ===== */
+.sync.saving i{background:var(--rose);box-shadow:0 0 0 5px rgba(255,95,162,.14);animation:sync-pulse 1s ease-in-out infinite}
+@keyframes sync-pulse{50%{opacity:.4;box-shadow:0 0 0 9px rgba(255,95,162,.04)}}
+#loadOverlay{position:fixed;inset:0;z-index:95;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:rgba(255,255,255,.84);backdrop-filter:blur(20px)}
+#loadOverlay.show{display:flex;animation:pageIn .28s var(--ease) both}
+.load-spinner{width:52px;height:52px;border-radius:50%;border:4px solid rgba(255,95,162,.18);border-top-color:var(--rose);animation:spin .85s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loadOverlay p{margin:0;color:#8b5f77;font-weight:900;font-size:14px;letter-spacing:.04em}

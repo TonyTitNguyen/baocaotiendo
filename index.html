@@ -4,11 +4,15 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Báo cáo tiến độ HDL - Thẩm mỹ Kangnam</title>
-<meta name="theme-color" content="#ff5fa2" />
+<meta name="theme-color" content="#b8265a" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=DM+Sans:opsz,wght@9..40,300..900&family=JetBrains+Mono:wght@500..700&display=swap" />
 <link rel="stylesheet" href="css/base.css" />
 <link rel="stylesheet" href="css/layout.css" />
 <link rel="stylesheet" href="css/components.css" />
 <link rel="stylesheet" href="css/responsive.css" />
+<link rel="stylesheet" href="css/refinement.css" />
 </head>
 <body>
 <div class="bg-orb orb-a"></div><div class="bg-orb orb-b"></div><div class="bg-orb orb-c"></div><div class="noise"></div>
@@ -24,14 +28,14 @@
       <button data-page="members"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 11.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2Zm0 2c3.5 0 6.3 1.65 6.3 3.7V19a2 2 0 0 1-2 2H4.5a2 2 0 0 1-2-2v-2.1c0-2.05 2.8-3.7 6.3-3.7Zm8.35-.45a3.35 3.35 0 1 1 0-6.7 3.35 3.35 0 0 1 0 6.7Zm.3 1.7c2.25.12 4.05 1.24 4.05 2.64V19a2 2 0 0 1-2 2h-2.72c.2-.44.32-.92.32-1.43V16.9c0-.88-.34-1.7-.93-2.45h1.28Z"/></svg><span>Thành viên</span></button>
       <button data-page="activity"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 1-8.94 5.53 1 1 0 1 1 1.79.9A8 8 0 1 0 12 4v2.2c0 .9-1.08 1.35-1.7.72L7.38 4a1 1 0 0 1 0-1.42L10.3-.34c.62-.63 1.7-.19 1.7.71V2Zm1 5a1 1 0 1 0-2 0v5c0 .34.17.66.45.85l3.4 2.25A1 1 0 0 0 16 13.44l-3-2V7Z"/></svg><span>Hoạt động</span></button>
     </nav>
-    <div class="side-card"><b>Signature Edition</b><h3>Kangnam Aesthetic Clinic</h3><p id="cloudMini">Google Sheet</p></div>
+    <div class="side-card"><b>Signature Edition</b><h3>Kangnam Aesthetic Clinic</h3><p id="cloudMini">Đang kết nối...</p></div>
     <div class="profile"><div class="avatar">KN</div><div><b>Thẩm mỹ Kangnam</b><span>Bệnh viện thẩm mỹ</span></div></div>
   </aside>
   <main class="main">
     <header class="topbar">
       <button class="hamb" id="hamb">☰</button>
       <div class="title"><span>Kangnam Ultimate Dashboard</span><h2 id="title">Tổng quan</h2><p>Trang chủ / <b id="crumb">Tổng quan</b></p></div>
-      <div class="actions"><div class="sync" id="syncPill"><i></i><span id="syncText">Google Sheet</span></div><button id="quickAdd" class="btn primary">+ Tạo nhanh</button></div>
+      <div class="actions"><div class="sync" id="syncPill"><i></i><span id="syncText">Đang kết nối...</span></div><button id="quickAdd" class="btn primary">+ Tạo nhanh</button></div>
     </header>
     <section class="page active" id="page-dashboard">
       <div class="hero card">
@@ -92,7 +96,9 @@
   </div>
 </div>
 
+<div id="loadOverlay"><div class="load-spinner"></div><p>Đang tải dữ liệu...</p></div>
 <input type="file" id="jsonFile" accept="application/json" hidden /><div id="toast" class="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="js/seed.js"></script><script src="js/config.js"></script>
 <script src="js/storage.js"></script><script src="js/app.js"></script>
 </body></html>
