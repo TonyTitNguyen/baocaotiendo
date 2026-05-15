@@ -1737,6 +1737,39 @@ select:hover {
   transform: translateY(0) scale(.985) !important;
 }
 
+.member-top{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.member-delete{
+  flex:0 0 38px;
+  background:rgba(255,240,243,.86)!important;
+  border:1px solid rgba(255,79,109,.14)!important;
+}
+.member-meta{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:16px;
+}
+.member-meta span{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:0 10px;
+  border-radius:999px;
+  background:rgba(255,95,162,.08);
+  color:#9b607c;
+  font-size:11px;
+  font-weight:950;
+}
+
 /* Better toolbar on dense data pages */
 .toolbar {
   margin-bottom: 18px !important;
