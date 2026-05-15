@@ -1746,9 +1746,74 @@ select:hover {
   gap:12px;
 }
 .member-delete{
-  flex:0 0 38px;
-  background:rgba(255,240,243,.86)!important;
-  border:1px solid rgba(255,79,109,.14)!important;
+  flex:0 0 42px;
+  width:42px!important;
+  height:42px!important;
+  border-radius:16px!important;
+}
+.tiny.d{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  color:#d72f5b!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.98),rgba(255,238,246,.78))!important;
+  border:1px solid rgba(255,79,109,.24)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.92),
+    0 12px 24px rgba(210,57,94,.13),
+    0 0 0 1px rgba(255,255,255,.62)!important;
+}
+.tiny.d:before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  z-index:-1;
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(255,79,109,.16),rgba(255,255,255,0) 58%);
+}
+.tiny.d:after{
+  content:"";
+  position:absolute;
+  top:7px;
+  left:9px;
+  right:9px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,79,109,.62),transparent);
+  opacity:.9;
+}
+.tiny.d .trash-icon{
+  width:17px;
+  height:17px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.15;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 4px 6px rgba(210,57,94,.18));
+}
+.tiny.d:hover{
+  color:white!important;
+  background:linear-gradient(135deg,#ff4f6d,#d72f5b 56%,#84205a)!important;
+  border-color:rgba(255,255,255,.35)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.34),
+    0 16px 30px rgba(210,57,94,.28),
+    0 0 0 4px rgba(255,79,109,.11)!important;
+  transform:translateY(-2px);
+}
+.tiny.d:hover:before{
+  background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,0) 60%);
+}
+.tiny.d:hover:after{
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);
+}
+.tiny.d:focus-visible{
+  outline:0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.92),
+    0 0 0 4px rgba(255,79,109,.16),
+    0 14px 28px rgba(210,57,94,.18)!important;
 }
 .member-meta{
   position:relative;
