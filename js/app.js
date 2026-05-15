@@ -92,6 +92,20 @@ function delTask(tid){const t=data.tasks.find(x=>x.id===tid);if(!t)return;if(con
 function updateProject(pid){const ts=data.tasks.filter(t=>t.projectId===pid),p=data.projects.find(p=>p.id===pid);if(!p||!ts.length)return;const score=ts.reduce((s,t)=>s+(t.status==='done'?1:t.status==='review'?0.72:t.status==='doing'?0.45:0),0);p.progress=Math.round(score/ts.length*100);if(p.progress===100)p.status='done';else if(p.progress>0&&p.status==='planning')p.status='doing';else if(p.status==='done')p.status='doing'}
 function saveMember(e){e.preventDefault();const m={id:id('m'),name:$('#mname').value.trim(),role:$('#mrole').value.trim()||'Thành viên'};data.members.push(m);closeModals();persist(`Đã thêm thành viên: ${m.name}`)}
 function cloudOK(){return cloud.scriptUrl&&cloud.token&&!String(cloud.scriptUrl).includes('PASTE_APPS_SCRIPT')&&!String(cloud.token).includes('PASTE_SYNC_KEY')}function cloudStatus(mode=''){const pill=$('#syncPill'),txt=$('#syncText'),mini=$('#cloudMini');pill.classList.remove('online','error');if(!cloudOK()){pill.classList.add('error');txt.textContent='Cloud chưa cấu hình';mini.textContent='Cần cấu hình Sheet';return}if(mode==='error'){pill.classList.add('error');txt.textContent='Sync lỗi';mini.textContent='Sync lỗi';return}if(mode==='saving'){txt.textContent='Đang sync...';mini.textContent='Đang sync...';return}pill.classList.add('online');txt.textContent='Google Sheet';mini.textContent='Đang lưu online'}
+function jsonpRequest(url,timeout=12000){
+  return new Promise((resolve,reject)=>{
+    const cb='jsonp_'+Date.now().toString(36)+Math.random().toString(36).slice(2);
+    const script=document.createElement('script');
+    const cleanup=()=>{clearTimeout(timer);delete window[cb];script.remove()};
+    const timer=setTimeout(()=>{cleanup();reject(Error('jsonp_timeout'))},timeout);
+    window[cb]=payload=>{cleanup();resolve(payload)};
+    script.onerror=()=>{cleanup();reject(Error('jsonp_error'))};
+    const u=new URL(url);
+    u.searchParams.set('callback',cb);
+    script.src=u.toString();
+    document.head.appendChild(script);
+  });
+}
 async function pushCloud(silent=false){
   if(!cloudOK()){cloudStatus('error');if(!silent)toast('Chưa cấu hình Google Sheet trong js/config.js');return}
   try{
