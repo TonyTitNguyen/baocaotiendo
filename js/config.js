@@ -4,11 +4,11 @@ window.CLOUD_CONFIG = {
   // Cloud-only mode:
   // Paste your Apps Script Web App URL here.
   // Example: "https://script.google.com/macros/s/AKfycbx.../exec"
-  scriptUrl: "PASTE_APPS_SCRIPT_WEB_APP_URL_HERE",
+  scriptUrl: "https://script.google.com/macros/s/AKfycbyw8pcbxKW-e9fB9PR7Gg09mGmJfGq_7p4ff1t7_zo-BiRL_SiOwlNaw6BXMfY8YquG3A/exec",
 
   // Paste the same SECRET value you set in apps-script/Code.gs.
   // Warning: if your GitHub repository is public, this file is also public.
-  token: "PASTE_SYNC_KEY_HERE",
+  token: "kangnam-progress-2026-private",
 
   autoSync: true,
   syncDebounceMs: 700
